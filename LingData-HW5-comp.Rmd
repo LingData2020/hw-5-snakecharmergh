@@ -123,7 +123,7 @@ Write down your general conclusions about the relationship between `f1`, `f2`, a
 ```
 - No significant dependence for a.
 - Significant dependence for A. Small slope, but significant.
-- Positive correlation for y, but data are very noisy.
+- Positive correlation for y, but insignificant, because data are noisy.
 ```
 
 ## 3. Dutch causative constructions
@@ -182,6 +182,10 @@ a & b \\
 c & d
 \end{matrix}
 $$
+```{r}
+table(d_caus$Aux, d_caus$EPTrans)
+```
+
 one can find *odds ratio* as $(a/c)/(b/d)$.
 
 ```{r 3.4}
@@ -196,10 +200,15 @@ Find odds ratio for expected frequencies of `Aux` and `EPTrans`
 ```
 What can you say about odds ratio of expected frequencies for arbitrary data?
 
+```
+They are expected to be independent.
+```
+
 ### 3.5 
 Calculate effect size for this test using Cramer's V (phi).
 ```{r 3.5}
-
+chi.2=chisq.test(d_caus$Aux, d_caus$EPTrans)$statistic
+sqrt(chi.2/nrow(d_caus))
 ```
 
 ### 3.6. 
@@ -208,11 +217,19 @@ Report the results of independence test using the following template:
 We have / have not found a significant association between variables ... and ... (p < 0.001).  The odds of ... were ... times higher / lower in (group ....) than in (group ....). Effect size is large / medium / small (Cramer's V = ....).
 ```
 
+Result:
+```
+We have found a signifiant association between
+variables Aux and EPTrans (p < 0.001). The odds of "doen" were 2.6
+times higher in group "Intr" than in group "Tr". Effext
+size is medium (Cramer's V = 0.17)
+```
+
 ### 3.7 
 Visualize the distribution using mosaic plot.
 Use `mosaic()` function from `vcd` library.
 ```{r 3.7}
-
+mosaic(~ Aux + EPTrans, data = d_caus, shade=TRUE)
 ```
 
 Below is an example of how to use mosaic() with three variables.
@@ -223,11 +240,16 @@ Below is an example of how to use mosaic() with three variables.
 ### 3.8 
 Why is it not recommended to run multiple Chisq tests of independence on different variables within your dataset whithout adjusting for the multiplicity? (i.e. just testing all the pairs of variables one by one)  
 ```
-
+It's called p-hacking and overestimates the significance.
 ```
 
 ### 3.9 
 Provide a short text (300 words) describing the hypothesis of this study and the results of your analysis.
-```{r 3.9}
 
+```{r 3.9}
+# We tested whether the use of the Dutch words "doen" and "laten" were correlated
+# with any indicators of the gramatical context.
+# We found that doen was used 2.6 times more often when used with an intransitive
+# predicate.
 ```
+.
